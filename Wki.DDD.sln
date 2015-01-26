@@ -5,6 +5,15 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wki.DDD", "Wki.DDD\Wki.DDD.csproj", "{09B94C9C-D383-451B-BD59-81FC07F6D54D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wki.DDD.Tests", "Wki.DDD.Tests\Wki.DDD.Tests.csproj", "{DA734C87-7E3C-4B4C-8839-CBDE8AA804B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ED3A03EB-3597-46DD-B490-E901D96E0187}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +24,10 @@ Global
 		{09B94C9C-D383-451B-BD59-81FC07F6D54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09B94C9C-D383-451B-BD59-81FC07F6D54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09B94C9C-D383-451B-BD59-81FC07F6D54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA734C87-7E3C-4B4C-8839-CBDE8AA804B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA734C87-7E3C-4B4C-8839-CBDE8AA804B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA734C87-7E3C-4B4C-8839-CBDE8AA804B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA734C87-7E3C-4B4C-8839-CBDE8AA804B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

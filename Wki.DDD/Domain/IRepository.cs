@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wki.DDD
+namespace Wki.DDD.Domain
 {
-    public class Class1
+    public interface IRepository
     {
     }
 }
