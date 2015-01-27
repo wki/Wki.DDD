@@ -8,7 +8,7 @@ namespace Wki.DDD.Domain
 {
     public class DomainObject
     {
-        private List<BusinessRule> _brokenRules = new List<BusinessRule>();
+        private List<BusinessRule> brokenRules = new List<BusinessRule>();
 
         public DomainObject() { }
 
@@ -16,23 +16,23 @@ namespace Wki.DDD.Domain
 
         public void AddBrokenRule(BusinessRule rule)
         {
-            _brokenRules.Add(rule);
+            brokenRules.Add(rule);
         }
 
         public List<BusinessRule> GetBrokenRules()
         {
-            _brokenRules.Clear();
+            brokenRules.Clear();
             Validate();
-            return _brokenRules;
+            return brokenRules;
         }
 
         public void ThrowExceptionIfInvalid()
         {
             GetBrokenRules();
-            if (_brokenRules.Count > 0)
+            if (brokenRules.Count > 0)
             {
                 var issues = new StringBuilder();
-                foreach (var rule in _brokenRules)
+                foreach (var rule in brokenRules)
                 {
                     issues.AppendLine(rule.ToString());
                 }
