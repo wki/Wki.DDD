@@ -38,28 +38,29 @@ namespace Wki.DDD.Tests.Domain
     [TestClass]
     public class ServiceTest
     {
-        //private void printRegistrations(IWindsorContainer container)
-        //{
-        //    Console.WriteLine("Registrations:");
-        //    foreach (var handler in container.Kernel.GetAssignableHandlers(typeof(object)))
-        //    {
-        //        foreach (var service_name in handler.ComponentModel.Services)
-        //        {
-        //            Console.WriteLine("Service: {0} Name: {1}, Implemented By {2}",
-        //                service_name,
-        //                handler.ComponentModel.Name,
-        //                handler.ComponentModel.Implementation);
-        //        }
-        //    }
-        //}
+        [TestInitialize]
+        public void SetupContainer()
+        {
+            
+        }
 
         [TestMethod]
-        public void TestServiceInstantiation()
+        public void SampleService_Initially_HasNotHandledEvents()
         {
-            var s = new SampleService();
+            // Arrange
+            var service = new SampleService();
 
-            Assert.AreEqual(s.NrEvents, 0);
+            // Assert
+            Assert.AreEqual(0, service.NrEvents);
+
         }
+        //[TestMethod]
+        //public void TestServiceInstantiation()
+        //{
+        //    var s = new SampleService();
+
+        //    Assert.AreEqual(s.NrEvents, 0);
+        //}
 
         //[TestMethod]
         //public void TestHandling()

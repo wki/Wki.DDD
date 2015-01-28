@@ -28,7 +28,8 @@ namespace Wki.DDD.EventBus
         public void Publish<T>(T @event) where T : class, IEvent
         {
             log.Debug(m => m("Publish: {0} Type: {1}", @event.GetType(), typeof(T)));
-            
+            System.Console.WriteLine("Publish: {0} Type: {1}", @event.GetType(), typeof(T));
+
             Dispatch<T>(@event);
             DispatchInterfaces(@event);
         }
@@ -41,6 +42,7 @@ namespace Wki.DDD.EventBus
             foreach (var eventHandler in container.ResolveAll<ISubscribe<T>>())
             {
                 log.Debug(m => m("Handler: {0}", eventHandler));
+                System.Console.WriteLine("Handler: {0}", eventHandler);
                 eventHandler.Handle(@event);
                 event_handled = true;
             }
@@ -54,6 +56,7 @@ namespace Wki.DDD.EventBus
             foreach (var t in @event.GetType().GetInterfaces().Where(t => typeof(IEvent).IsAssignableFrom(t)))
             {
                 log.Debug(m => m("Trying to Dispatch Type: {0}", t.FullName));
+                System.Console.WriteLine("Trying to Dispatch Type: {0}", t.FullName);
                 MethodInfo publishMethod = this.GetType().GetMethod("Dispatch").MakeGenericMethod(t);
 
                 publishMethod.Invoke(this, new object[] { @event } );

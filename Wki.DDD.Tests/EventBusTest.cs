@@ -1,30 +1,95 @@
-﻿using System;
-using Microsoft.Practices.Unity;
+﻿using FakeItEasy;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 using Wki.DDD.EventBus;
-using System.Reflection;
+using Wki.DDD.Tests.Events;
+using Wki.DDD.Tests.Services;
+using Wki.DDD.Domain;
 
 namespace Wki.DDD.Tests
 {
-    interface XEvent {} // will not lead to calling an event handler
-    interface YEvent : IEvent {}
-    public class SomethingHappened    : IEvent, XEvent {}
-    public class GoodThingHappened    : SomethingHappened, YEvent {}
-    public class BadThingHappened     : SomethingHappened {}
-    public class AnotherThingHappened : IEvent {}
-
-    public class ServiceBase : IPublish
+    [TestClass]
+    public class EventBusTest
     {
-        public int nrEventsHandled;
+        CatchAllService catchAllService;
+        ErrorService errorService;
+        SomethingService somethingService;
+        SomethingErrorService somethingErrorService;
+        
+        IContainer container;
+        IHub hub;
 
-        public ServiceBase()
+        [TestInitialize]
+        public void SetupContainer()
         {
-            nrEventsHandled = 0;
+            catchAllService = new CatchAllService();
+            errorService = new ErrorService();
+            somethingService = new SomethingService();
+            somethingErrorService = new SomethingErrorService();
+
+            container = A.Fake<IContainer>();
+
+            // TODO: also test for DomainEvent. Must get added in Hub also
+
+            A.CallTo(() => container.ResolveAll<ISubscribe<IEvent>>())
+                .Returns(new ISubscribe<IEvent>[] { catchAllService });
+
+            A.CallTo(() => container.ResolveAll<ISubscribe<ErrorOccured>>())
+                .Returns(new ISubscribe<ErrorOccured>[] { errorService, somethingErrorService });
+
+            A.CallTo(() => container.ResolveAll<ISubscribe<SomethingHappened>>())
+                .Returns(new ISubscribe<SomethingHappened>[] { somethingService, somethingErrorService });
+
+            hub = new Hub(container);
+        }
+
+        [TestMethod]
+        public void Hub_NoEventsSent_NothingIsCaptured()
+        {
+            // Assert
+            Assert.AreEqual(0, catchAllService.nrEventsHandled, "catchAll");
+            Assert.AreEqual(0, errorService.nrEventsHandled, "error");
+            Assert.AreEqual(0, somethingService.nrEventsHandled, "something");
+            Assert.AreEqual(0, somethingErrorService.nrEventsHandled, "somethingError");
+        }
+
+        [TestMethod]
+        public void Hub_NotCapturedSent_OnlyCatchAllCaptures()
+        {
+            // Act
+            hub.Publish(new NotCaptured());
+
+            // Assert
+            Assert.AreEqual(1, catchAllService.nrEventsHandled, "catchAll");
+            Assert.AreEqual(0, errorService.nrEventsHandled, "error");
+            Assert.AreEqual(0, somethingService.nrEventsHandled, "something");
+            Assert.AreEqual(0, somethingErrorService.nrEventsHandled, "somethingError");
+
         }
     }
 
+
+
+
+    //interface XEvent {} // will not lead to calling an event handler
+    //interface YEvent : IEvent {}
+    //public class SomethingHappened    : IEvent, XEvent {}
+    //public class GoodThingHappened    : SomethingHappened, YEvent {}
+    //public class BadThingHappened     : SomethingHappened {}
+    //public class AnotherThingHappened : IEvent {}
+
+    //public class ServiceBase : IPublish
+    //{
+    //    public int nrEventsHandled;
+
+    //    public ServiceBase()
+    //    {
+    //        nrEventsHandled = 0;
+    //    }
+    //}
+
+    /*
     interface IAService {}
     interface IBService {}
     interface ICService {}
@@ -234,4 +299,5 @@ namespace Wki.DDD.Tests
             Assert.AreEqual(3, cService.nrEventsHandled, "subscribed event C handled");
         }
     }
+    */
 }
