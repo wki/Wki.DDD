@@ -1,11 +1,8 @@
 ﻿using FakeItEasy;
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 using Wki.DDD.EventBus;
 using Wki.DDD.Tests.Events;
 using Wki.DDD.Tests.Services;
-using Wki.DDD.Domain;
 
 namespace Wki.DDD.Tests.EventBus
 {
