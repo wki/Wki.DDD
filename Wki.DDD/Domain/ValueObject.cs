@@ -10,7 +10,5 @@ namespace Wki.DDD.Domain
     {
         public ValueObject()
         { }
-
-
     }
 }

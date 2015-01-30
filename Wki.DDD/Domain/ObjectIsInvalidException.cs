@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wki.DDD.Domain
 {
-    class ObjectIsInvalidException : Exception
+    public class ObjectIsInvalidException : Exception
     {
         public ObjectIsInvalidException(string message)
             : base(message)

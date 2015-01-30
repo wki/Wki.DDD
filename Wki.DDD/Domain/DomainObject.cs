@@ -12,7 +12,7 @@ namespace Wki.DDD.Domain
 
         public DomainObject() { }
 
-        protected void Validate() { }
+        protected virtual void Validate() { }
 
         public void AddBrokenRule(BusinessRule rule)
         {
@@ -32,10 +32,10 @@ namespace Wki.DDD.Domain
             if (brokenRules.Count > 0)
             {
                 var issues = new StringBuilder();
-                foreach (var rule in brokenRules)
-                {
-                    issues.AppendLine(rule.ToString());
-                }
+                brokenRules
+                    .ForEach(r => issues.AppendLine(r.ToString()));
+
+                throw new ObjectIsInvalidException(issues.ToString());
             }
         }
     }
