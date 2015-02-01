@@ -58,9 +58,11 @@
     <Compile Include="Domain\ObjectIsInvalidException.cs" />
     <Compile Include="Domain\ValueObject.cs" />
     <Compile Include="EventBus\EventBusExtension.cs" />
+    <Compile Include="EventBus\EventInvoker.cs" />
     <Compile Include="EventBus\Hub.cs" />
     <Compile Include="EventBus\IContainer.cs" />
     <Compile Include="EventBus\IEvent.cs" />
+    <Compile Include="EventBus\IEventInvoker.cs" />
     <Compile Include="EventBus\IHub.cs" />
     <Compile Include="EventBus\IPublish.cs" />
     <Compile Include="EventBus\ISubscribe.cs" />
