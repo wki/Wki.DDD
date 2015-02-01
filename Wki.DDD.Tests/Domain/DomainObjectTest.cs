@@ -49,7 +49,7 @@ namespace Wki.DDD.Tests.Domain
 
         [TestMethod]
         [ExpectedException(typeof(ObjectIsInvalidException))]
-        public void UnitOfWork_StateUnderTest_ExpectedBehaviour()
+        public void BrokenDomainObject_BrokenRule_ThrowsException()
         {
             // Arrange
             var brokenDomainObject = new BrokenDomainObject();

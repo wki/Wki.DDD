@@ -7,7 +7,7 @@ using Wki.DDD.Tests.Services;
 namespace Wki.DDD.Tests.EventBus
 {
     [TestClass]
-    public class EventBusTest
+    public class ImmediateDispatcherTest
     {
         CatchAllService catchAllService;
         ErrorService errorService;
@@ -15,10 +15,10 @@ namespace Wki.DDD.Tests.EventBus
         SomethingErrorService somethingErrorService;
         
         IContainer container;
-        IHub hub;
+        ImmediateDispatcher dispatcher;
 
         [TestInitialize]
-        public void SetupContainer()
+        public void SetupDispatcher()
         {
             catchAllService = new CatchAllService();
             errorService = new ErrorService();
@@ -26,8 +26,6 @@ namespace Wki.DDD.Tests.EventBus
             somethingErrorService = new SomethingErrorService();
 
             container = A.Fake<IContainer>();
-
-            // TODO: also test for DomainEvent. Must get added in Hub also
 
             A.CallTo(() => container.ResolveAll<ISubscribe<IEvent>>())
                 .Returns(new ISubscribe<IEvent>[] { catchAllService });
@@ -38,11 +36,11 @@ namespace Wki.DDD.Tests.EventBus
             A.CallTo(() => container.ResolveAll<ISubscribe<SomethingHappened>>())
                 .Returns(new ISubscribe<SomethingHappened>[] { somethingService, somethingErrorService });
 
-            hub = new Hub(container);
+            dispatcher = new ImmediateDispatcher(container);
         }
 
         [TestMethod]
-        public void Hub_NoEventsSent_NothingIsCaptured()
+        public void ImmediateDispatcher_NoEventsSent_NothingIsCaptured()
         {
             // Assert
             Assert.AreEqual(0, catchAllService.nrEventsHandled, "catchAll");
@@ -52,10 +50,10 @@ namespace Wki.DDD.Tests.EventBus
         }
 
         [TestMethod]
-        public void Hub_NotCapturedSent_OnlyCatchAllCaptures()
+        public void ImmediateDispatcher_NotCapturedSent_OnlyCatchAllCaptures()
         {
             // Act
-            hub.Publish(new NotCaptured());
+            dispatcher.Dispatch(new NotCaptured());
 
             // Assert
             Assert.AreEqual(1, catchAllService.nrEventsHandled, "catchAll");
@@ -65,10 +63,10 @@ namespace Wki.DDD.Tests.EventBus
         }
 
         [TestMethod]
-        public void Hub_ErrorSent_ErrorAndCatchAllCaptures()
+        public void ImmediateDispatcher_ErrorSent_ErrorAndCatchAllCaptures()
         {
             // Act
-            hub.Publish(new ErrorOccured());
+            dispatcher.Dispatch(new ErrorOccured());
 
             // Assert
             Assert.AreEqual(1, catchAllService.nrEventsHandled, "catchAll");
@@ -78,11 +76,11 @@ namespace Wki.DDD.Tests.EventBus
         }
 
         [TestMethod]
-        public void Hub_ErrorSentTwice_ErrorAndCatchAllCaptures()
+        public void ImmediateDispatcher_ErrorSentTwice_ErrorAndCatchAllCaptures()
         {
             // Act
-            hub.Publish(new ErrorOccured());
-            hub.Publish(new ErrorOccured());
+            dispatcher.Dispatch(new ErrorOccured());
+            dispatcher.Dispatch(new ErrorOccured());
 
             // Assert
             Assert.AreEqual(2, catchAllService.nrEventsHandled, "catchAll");
@@ -92,18 +90,75 @@ namespace Wki.DDD.Tests.EventBus
         }
 
         [TestMethod]
-        public void Hub_MiscMessagesSent_ErrorAndCatchAllCaptures()
+        public void ImmediateDispatcher_MiscMessagesSent_ErrorAndCatchAllCaptures()
         {
             // Act
-            hub.Publish(new ErrorOccured());
-            hub.Publish(new SomethingHappened());
-            hub.Publish(new SomethingHappened());
+            dispatcher.Dispatch(new ErrorOccured());
+            dispatcher.Dispatch(new SomethingHappened());
+            dispatcher.Dispatch(new SomethingHappened());
 
             // Assert
             Assert.AreEqual(3, catchAllService.nrEventsHandled, "catchAll");
             Assert.AreEqual(100, errorService.nrEventsHandled, "error");
             Assert.AreEqual(2, somethingService.nrEventsHandled, "something");
             Assert.AreEqual(102, somethingErrorService.nrEventsHandled, "somethingError");
+        }
+
+        [TestMethod]
+        public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchEventBenchmark()
+        {
+            // Arrange
+            var errorOccured = new ErrorOccured();
+            var somethingHappened = new SomethingHappened();
+
+            // Act
+            for (var i = 0; i < 1000; i++)
+            {
+                dispatcher.DispatchEvent(errorOccured);
+                dispatcher.DispatchEvent(somethingHappened);
+                dispatcher.DispatchEvent(somethingHappened);
+            }
+
+            // Assert
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchInterfacesBenchmark()
+        {
+            // Arrange
+            var errorOccured = new ErrorOccured();
+            var somethingHappened = new SomethingHappened();
+
+            // Act
+            for (var i = 0; i < 1000; i++)
+            {
+                dispatcher.DispatchInterfaces(errorOccured);
+                dispatcher.DispatchInterfaces(somethingHappened);
+                dispatcher.DispatchInterfaces(somethingHappened);
+            }
+
+            // Assert
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchBenchmark()
+        {
+            // Arrange
+            var errorOccured = new ErrorOccured();
+            var somethingHappened = new SomethingHappened();
+
+            // Act
+            for (var i = 0; i < 1000; i++)
+            {
+                dispatcher.Dispatch(errorOccured);
+                dispatcher.Dispatch(somethingHappened);
+                dispatcher.Dispatch(somethingHappened);
+            }
+
+            // Assert
+            Assert.IsTrue(true);
         }
     }
 }

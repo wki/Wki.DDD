@@ -1,6 +1,5 @@
 ﻿using Common.Logging;
 using System.Linq;
-using System.Reflection;
 
 namespace Wki.DDD.EventBus
 {

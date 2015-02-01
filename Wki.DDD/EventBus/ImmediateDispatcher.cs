@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Common.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Wki.DDD.EventBus
 {
@@ -18,7 +18,7 @@ namespace Wki.DDD.EventBus
 
         public void Dispatch<T>(T @event) where T : class, IEvent
         {
-            DispatchEvent<T>(@event);
+            DispatchEvent(@event);
             DispatchInterfaces(@event);
         }
 
@@ -26,6 +26,8 @@ namespace Wki.DDD.EventBus
         // return value may be of interest to caching logic.
         public void DispatchEvent<T>(T @event) where T : class, IEvent
         {
+            log.Debug(m => m("Dispatch Event: {0}", @event));
+
             foreach (var eventHandler in container.ResolveAll<ISubscribe<T>>())
             {
                 log.Debug(m => m("Handler: {0}", eventHandler));
@@ -35,14 +37,29 @@ namespace Wki.DDD.EventBus
 
         public void DispatchInterfaces(IEvent @event)
         {
-            // Hint: this Query could be cached.
-            foreach (var t in @event.GetType().GetInterfaces().Where(t => typeof(IEvent).IsAssignableFrom(t)))
+            foreach (var t in ListDispatchableInterfaces(@event))
             {
-                log.Debug(m => m("Trying to Dispatch Type: {0}", t.FullName));
-                MethodInfo publishMethod = this.GetType().GetMethod("DispatchEvent").MakeGenericMethod(t);
-
-                publishMethod.Invoke(this, new object[] { @event });
+                CreateDispatchMethod(t)
+                    .Invoke(this, new[] { @event });
             }
         }
+
+        #region internal helpers
+        private IEnumerable<Type> ListDispatchableInterfaces(IEvent @event)
+        {
+            return @event
+                .GetType()
+                .GetInterfaces()
+                .Where(t => typeof(IEvent).IsAssignableFrom(t));
+        }
+
+        private MethodInfo CreateDispatchMethod(Type t)
+        {
+            return this
+                .GetType()
+                .GetMethod("DispatchEvent")
+                .MakeGenericMethod(t);
+        }
+        #endregion
     }
 }

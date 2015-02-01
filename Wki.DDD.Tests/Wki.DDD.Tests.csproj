@@ -62,7 +62,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Domain\DomainObjectTest.cs" />
-    <Compile Include="EventBus\EventBusTest.cs" />
+    <Compile Include="EventBus\ImmediateDispatcherTest.cs" />
     <Compile Include="Events\ErrorOccured.cs" />
     <Compile Include="Events\NotCaptured.cs" />
     <Compile Include="Events\SomethingHappened.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\SomethingErrorService.cs" />
     <Compile Include="Services\SomethingService.cs" />
+    <Compile Include="EventBus\HubTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
