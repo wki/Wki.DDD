@@ -35,6 +35,7 @@ namespace Wki.DDD.EventBus
             }
         }
 
+        // made public to allow a benchmark during test
         public void DispatchInterfaces(IEvent @event)
         {
             foreach (var t in ListDispatchableInterfaces(@event))
