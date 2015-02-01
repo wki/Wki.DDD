@@ -60,8 +60,10 @@
     <Compile Include="EventBus\EventBusExtension.cs" />
     <Compile Include="EventBus\Hub.cs" />
     <Compile Include="EventBus\IContainer.cs" />
+    <Compile Include="EventBus\IDispatcher.cs" />
     <Compile Include="EventBus\IEvent.cs" />
     <Compile Include="EventBus\IHub.cs" />
+    <Compile Include="EventBus\ImmediateDispatcher.cs" />
     <Compile Include="EventBus\IPublish.cs" />
     <Compile Include="EventBus\ISubscribe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
