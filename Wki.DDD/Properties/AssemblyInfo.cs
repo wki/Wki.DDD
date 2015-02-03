@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Wki.DDD")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Simple helper library for building DDD projects")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Wolfgang Kinkeldei")]
 [assembly: AssemblyProduct("Wki.DDD")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
