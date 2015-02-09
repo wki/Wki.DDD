@@ -4,10 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Wki.DDD.Sandbox
 {
     [TestClass]
-    public class UnitTest1
+    public class Contravariance
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Covariance_Compiles_OK()
         {
             Action<string> log;
 

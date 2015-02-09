@@ -124,7 +124,7 @@ namespace Wki.DDD.Tests.EventBus
         }
 
         [TestMethod]
-        public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchInterfacesBenchmark()
+        public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchBaseTypesBenchmark()
         {
             // Arrange
             var errorOccured = new ErrorOccured();
@@ -133,9 +133,9 @@ namespace Wki.DDD.Tests.EventBus
             // Act
             for (var i = 0; i < 1000; i++)
             {
-                dispatcher.DispatchInterfaces(errorOccured);
-                dispatcher.DispatchInterfaces(somethingHappened);
-                dispatcher.DispatchInterfaces(somethingHappened);
+                dispatcher.DispatchBaseTypes(errorOccured);
+                dispatcher.DispatchBaseTypes(somethingHappened);
+                dispatcher.DispatchBaseTypes(somethingHappened);
             }
 
             // Assert
