@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Wolfgang Kinkeldei</authors>
+    <owners>Wolfgang Kinkeldei</owners>
+    <projectUrl>https://github.com/wki/Wki.DDD</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>a collection of base classes for implementing simple projects based on the tactical patterns for DDD</description>
+    <releaseNotes>initial release.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>DDD</tags>
+  </metadata>
+</package>
