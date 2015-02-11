@@ -1,6 +1,6 @@
 ﻿namespace Wki.DDD.Domain
 {
-    class ValueObject : DomainObject
+    public class ValueObject : DomainObject
     {
         public ValueObject()
         { }
