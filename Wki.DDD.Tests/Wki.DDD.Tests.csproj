@@ -62,6 +62,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Domain\DomainObjectTest.cs" />
+    <Compile Include="Domain\DomainEventTest.cs" />
     <Compile Include="EventBus\ImmediateDispatcherTest.cs" />
     <Compile Include="Events\ErrorOccured.cs" />
     <Compile Include="Events\NotCaptured.cs" />

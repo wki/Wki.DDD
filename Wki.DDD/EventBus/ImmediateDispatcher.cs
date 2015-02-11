@@ -9,6 +9,8 @@ namespace Wki.DDD.EventBus
     public class ImmediateDispatcher : IDispatcher
     {
         private static ILog log = LogManager.GetCurrentClassLogger();
+        // TODO: concurrent dictionary ???
+        private static Dictionary<Type, List<MethodInfo>> methodCache = new Dictionary<Type, List<MethodInfo>>();
         private readonly IContainer container;
 
         public ImmediateDispatcher(IContainer container)
@@ -19,39 +21,52 @@ namespace Wki.DDD.EventBus
         public void Dispatch<T>(T @event) where T : class, IEvent
         {
             DispatchEvent(@event);
-            DispatchInterfaces(@event);
+            DispatchBaseTypes(@event);
         }
 
         // must be public to allow reflection to find it
         // return value may be of interest to caching logic.
-        public void DispatchEvent<T>(T @event) where T : class, IEvent
+        public bool DispatchEvent<T>(T @event) where T : class, IEvent
         {
+            var handlersCalled = false;
             log.Debug(m => m("Dispatch Event: {0}", @event));
 
             foreach (var eventHandler in container.ResolveAll<ISubscribe<T>>())
             {
                 log.Debug(m => m("Handler: {0}", eventHandler));
                 eventHandler.Handle(@event);
+                handlersCalled = true;
             }
+
+            return handlersCalled;
         }
 
         // made public to allow a benchmark during test
-        public void DispatchInterfaces(IEvent @event)
+        public void DispatchBaseTypes(IEvent @event)
         {
-            foreach (var t in ListDispatchableInterfaces(@event))
+            // caching speeds up by approx. factor 7 for very simple things
+            var eventType = @event.GetType();
+            if (methodCache.ContainsKey(eventType))
             {
-                CreateDispatchMethod(t)
-                    .Invoke(this, new[] { @event });
+                methodCache[eventType].ToList()
+                    .ForEach(m => m.Invoke(this, new[] { @event }));
             }
-        }
+            else
+            {
 
-        #region internal helpers
-        private IEnumerable<Type> ListDispatchableInterfaces(IEvent @event)
-        {
-            return @event
-                .GetType()
-                .GetInterfaces()
-                .Where(t => typeof(IEvent).IsAssignableFrom(t));
+                var handledDispatchMethods = new List<MethodInfo>();
+
+                foreach (var t in @event.GetAllBaseTypes())
+                {
+                    MethodInfo dispatchMethod = CreateDispatchMethod(t);
+                    object returnValue = dispatchMethod.Invoke(this, new[] { @event });
+
+                    if ((bool)returnValue)
+                        handledDispatchMethods.Add(dispatchMethod);
+                }
+
+                methodCache.Add(eventType, handledDispatchMethods);
+            }
         }
 
         private MethodInfo CreateDispatchMethod(Type t)
@@ -61,6 +76,5 @@ namespace Wki.DDD.EventBus
                 .GetMethod("DispatchEvent")
                 .MakeGenericMethod(t);
         }
-        #endregion
     }
 }
