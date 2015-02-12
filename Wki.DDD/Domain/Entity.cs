@@ -3,7 +3,7 @@ using System;
 
 namespace Wki.DDD.Domain
 {
-    public class Entity<IdType> : DomainObject, IEquatable<Entity<IdType>>, IPublish
+    public class Entity<IdType> : DomainObject, IEquatable<Entity<IdType>>
     {
         public IdType Id { get; private set; }
 
@@ -51,6 +51,12 @@ namespace Wki.DDD.Domain
             return other != null
                 && other is Entity<IdType>
                 && this == (Entity<IdType>)other;
+        }
+
+        void Publish<T>(T @event)
+            where T: class, IEvent
+        {
+            Hub.Current.Publish(@event);
         }
     }
 }
