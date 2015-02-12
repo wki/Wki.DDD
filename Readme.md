@@ -28,40 +28,40 @@ solution with these projects (Assuming "MyDomain" is your app's name):
 
 Create a class that implements Wki.DDD.EventBus.IContainer:
 
-  using Wki.DDD.EventBus;
-  namespace StatisticsCollector
-  {
-    public class StatisticsUnityContainer: IContainer
-	{
-	...
-	}
-  }
+    using Wki.DDD.EventBus;
+    namespace StatisticsCollector
+    {
+      public class StatisticsUnityContainer: IContainer
+	  {
+	  ...
+	  }
+    }
 
 Create a class for initializing your Container. For Unity the class
 might consist of the following snippets:
 
-  public static void Initialize(IUnityContainer unity)
-  {
-    var container = new StatisticsUnityContainer(unity);
-    new Hub(container);
-
-    unity
-        .RegisterTypes(
-            AllClasses.FromAssemblies(...)
-                .Where(t => typeof(IFactory).IsAssignableFrom(t)
-                         || typeof(IRepository).IsAssignableFrom(t)
-                         || typeof(IService).IsAssignableFrom(t)),
-            WithMappings.FromMatchingInterface,
-            WithName.Default
-        )
-	    
-        .RegisterTypes(
-            AllClasses.FromAssemblies(...)
-                .Where(t => t.GetInterfaces().Any(i => i.Name.StartsWith("ISubscribe"))),
-            WithMappings.FromAllInterfaces,
-            t => "EventHandler: " + t.FullName
-        );
-  }
+    public static void Initialize(IUnityContainer unity)
+    {
+      var container = new StatisticsUnityContainer(unity);
+      new Hub(container);
+    
+      unity
+          .RegisterTypes(
+              AllClasses.FromAssemblies(...)
+                  .Where(t => typeof(IFactory).IsAssignableFrom(t)
+                           || typeof(IRepository).IsAssignableFrom(t)
+                           || typeof(IService).IsAssignableFrom(t)),
+              WithMappings.FromMatchingInterface,
+              WithName.Default
+          )
+	      
+          .RegisterTypes(
+              AllClasses.FromAssemblies(...)
+                  .Where(t => t.GetInterfaces().Any(i => i.Name.StartsWith("ISubscribe"))),
+              WithMappings.FromAllInterfaces,
+              t => "EventHandler: " + t.FullName
+          );
+    }
 
 Abstracting the initialization away allows simple reuse.
 
@@ -74,17 +74,17 @@ There are some specialities:
 
  * Entity and Aggregate classes may omit Domain Events by calling:
 
-     Publish(new SomethingHappened { ... });
+    Publish(new SomethingHappened { ... });
 
  * Services (Implementors of IService) may register for Events
 
-     public class XxxService : IService, ISubscribe<SomethingHappened>
-	 {
-	   void Handle(SomethingHappened @event)
-	   {
-	   ...
-	   }
-	 }
+    public class XxxService : IService, ISubscribe<SomethingHappened>
+	{
+	  void Handle(SomethingHappened @event)
+	  {
+	  ...
+	  }
+	}
  
  * All constructors require all Interfaces they want to get instantiated
    objects at run time. Our Initialization will ensure the objects will
