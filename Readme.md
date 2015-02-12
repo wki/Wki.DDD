@@ -74,17 +74,20 @@ There are some specialities:
 
  * Entity and Aggregate classes may omit Domain Events by calling:
 
-    Publish(new SomethingHappened { ... });
+       void DoSomething()
+	   {
+        Publish(new SomethingHappened { ... });
+	   }
 
  * Services (Implementors of IService) may register for Events
 
-    public class XxxService : IService, ISubscribe<SomethingHappened>
-	{
-	  void Handle(SomethingHappened @event)
-	  {
-	  ...
-	  }
-	}
+       public class XxxService : IService, ISubscribe<SomethingHappened>
+	   {
+	     void Handle(SomethingHappened @event)
+	     {
+	     ...
+	     }
+	   }
  
  * All constructors require all Interfaces they want to get instantiated
    objects at run time. Our Initialization will ensure the objects will
