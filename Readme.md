@@ -70,28 +70,28 @@ Abstracting the initialization away allows simple reuse.
 Build your domain by structuring your DDD-specific classes into Subdomain-
 like folders containing namespaces or individual projects. Just as jou like.
 
-There are some specialities:
+There are some specialities.
 
- * Entity and Aggregate classes may omit Domain Events by calling:
+Entity and Aggregate classes may omit Domain Events by calling:
 
-       void DoSomething()
-	   {
-        Publish(new SomethingHappened { ... });
-	   }
+    void DoSomething()
+	{
+     Publish(new SomethingHappened { ... });
+	}
 
- * Services (Implementors of IService) may register for Events
+Services (Implementors of IService) may register for Events
 
-       public class XxxService : IService, ISubscribe<SomethingHappened>
-	   {
-	     void Handle(SomethingHappened @event)
-	     {
-	     ...
-	     }
-	   }
+    public class XxxService : IService, ISubscribe<SomethingHappened>
+	{
+	  void Handle(SomethingHappened @event)
+	  {
+	  ...
+	  }
+	}
  
- * All constructors require all Interfaces they want to get instantiated
-   objects at run time. Our Initialization will ensure the objects will
-   be present when needed.
+All constructors require all Interfaces they want to get instantiated
+objects at run time. Our Initialization will ensure the objects will
+be present when needed.
 
 Events currently are dispatched immediately when calling Publish().
 A more variable dispatching method is in planning to allow long-running
