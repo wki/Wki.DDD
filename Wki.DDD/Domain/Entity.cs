@@ -53,7 +53,7 @@ namespace Wki.DDD.Domain
                 && this == (Entity<IdType>)other;
         }
 
-        void Publish<T>(T @event)
+        public void Publish<T>(T @event)
             where T: class, IEvent
         {
             Hub.Current.Publish(@event);
