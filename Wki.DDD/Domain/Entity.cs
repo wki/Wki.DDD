@@ -5,9 +5,9 @@ namespace Wki.DDD.Domain
 {
     public class Entity<IdType> : DomainObject, IEquatable<Entity<IdType>>
     {
-        public IdType Id { get; private set; }
+        public IdType Id { get; set; }
 
-        // needed  ny EF
+        // needed  by EF
         protected Entity()
         { }
 
