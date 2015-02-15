@@ -12,9 +12,13 @@ namespace Wki.DDD.Specifications
     // https://kitchaiyong.wordpress.com/2009/10/10/repository-specification-unit-of-work-persistence-ignorance-poco-with-microsoft-entityframework-4-0-part-2/
     // https://msdn.microsoft.com/de-de/library/bb397951(v=vs.110).aspx
 
+    // see also: https://github.com/riteshrao/ncommon/blob/v1.2/NCommon/src/Specifications/ISpecification.cs
+
     public interface ISpecification<TEntity>
         where TEntity: class
     {
+        Expression<Predicate<TEntity>> Predicate { get; set; }
+
         bool IsSatisfiedBy(TEntity entity);
     }
 }

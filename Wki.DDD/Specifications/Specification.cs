@@ -6,31 +6,105 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+// see also: https://github.com/riteshrao/ncommon/blob/v1.2/NCommon/src/Specifications/Specification.cs
+
 namespace Wki.DDD.Specifications
 {
-    public class Specification<TEntity> : AbstractSpecification<TEntity>
-        where TEntity: class
+    public class Specification<TEntity> : ISpecification<TEntity>
+        where TEntity : class
     {
-        private Expression<Predicate<TEntity>> predicate;
+        public Expression<Predicate<TEntity>> Predicate { get; set; }
 
-        public Expression<Predicate<TEntity>> Predicate
+        public bool IsSatisfiedBy(TEntity entity)
         {
-            get { return predicate; }
+            return Predicate.Compile().Invoke(entity);
         }
 
         public Specification(Expression<Predicate<TEntity>> predicate)
         {
-            this.predicate = predicate;
+            Predicate = predicate;
         }
 
-        protected Specification(BinaryExpression expression)
-            : this(Expression.Lambda<Predicate<TEntity>>(expression))
+        #region AND
+        public static Specification<TEntity> operator &(Specification<TEntity> lhs, Specification<TEntity> rhs)
         {
+            InvocationExpression rightInvoke = Expression.Invoke(
+                rhs.Predicate,
+                lhs.Predicate.Parameters.Cast<Expression>()
+            );
+            BinaryExpression newExpression = Expression.MakeBinary(
+                ExpressionType.AndAlso,
+                lhs.Predicate.Body,
+                rightInvoke
+            );
+            return new Specification<TEntity>(
+                Expression.Lambda<Predicate<TEntity>>(newExpression, lhs.Predicate.Parameters)
+            );
         }
 
-        public override bool IsSatisfiedBy(TEntity entity) 
+        public Specification<TEntity> And(Expression<Predicate<TEntity>> predicate)
         {
-            return predicate.Compile().Invoke(entity);
+            return this & new Specification<TEntity>(predicate);
         }
+
+        public Specification<TEntity> And(Specification<TEntity> other)
+        {
+            return this & other;
+        }
+        #endregion
+
+        #region OR
+        public static Specification<TEntity> operator |(Specification<TEntity> lhs, Specification<TEntity> rhs)
+        {
+            InvocationExpression rightInvoke = Expression.Invoke(
+                rhs.Predicate,
+                lhs.Predicate.Parameters.Cast<Expression>()
+            );
+            BinaryExpression newExpression = Expression.MakeBinary(
+                ExpressionType.OrElse,
+                lhs.Predicate.Body,
+                rightInvoke
+            );
+            return new Specification<TEntity>(
+                Expression.Lambda<Predicate<TEntity>>(
+                    newExpression, 
+                    lhs.Predicate.Parameters
+                )
+            );
+        }
+
+        public Specification<TEntity> Or(Expression<Predicate<TEntity>> predicate)
+        {
+            return this | new Specification<TEntity>(predicate);
+        }
+
+        public Specification<TEntity> Or(Specification<TEntity> other)
+        {
+            return this | other;
+        }
+        #endregion
+
+        #region NOT
+        public static Specification<TEntity> operator !(Specification<TEntity> spec)
+        {
+            UnaryExpression newExpression = Expression.MakeUnary(
+                ExpressionType.Not,
+                spec.Predicate.Body,
+                typeof(Specification<TEntity>)
+            );
+
+            return new Specification<TEntity>(
+                Expression.Lambda<Predicate<TEntity>>(
+                    newExpression, 
+                    spec.Predicate.Parameters
+                )
+            );
+        }
+
+        public Specification<TEntity> Not()
+        {
+            return !this;
+        }
+        #endregion
     }
 }
