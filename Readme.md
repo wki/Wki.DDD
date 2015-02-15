@@ -32,9 +32,9 @@ Create a class that implements Wki.DDD.EventBus.IContainer:
     namespace StatisticsCollector
     {
       public class StatisticsUnityContainer: IContainer
-	  {
-	  ...
-	  }
+      {
+      ...
+      }
     }
 
 Create a class for initializing your Container. For Unity the class
@@ -54,7 +54,7 @@ might consist of the following snippets:
               WithMappings.FromMatchingInterface,
               WithName.Default
           )
-	      
+          
           .RegisterTypes(
               AllClasses.FromAssemblies(...)
                   .Where(t => t.GetInterfaces().Any(i => i.Name.StartsWith("ISubscribe"))),
@@ -75,19 +75,19 @@ There are some specialities.
 Entity and Aggregate classes may omit Domain Events by calling:
 
     void DoSomething()
-	{
+    {
      Publish(new SomethingHappened { ... });
-	}
+    }
 
 Services (Implementors of IService) may register for Events
 
     public class XxxService : IService, ISubscribe<SomethingHappened>
-	{
-	  void Handle(SomethingHappened @event)
-	  {
-	  ...
-	  }
-	}
+    {
+      void Handle(SomethingHappened @event)
+      {
+      ...
+      }
+    }
  
 All constructors require all Interfaces they want to get instantiated
 objects at run time. Our Initialization will ensure the objects will

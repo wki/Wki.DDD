@@ -74,6 +74,7 @@
     <Compile Include="Services\SomethingErrorService.cs" />
     <Compile Include="Services\SomethingService.cs" />
     <Compile Include="EventBus\HubTest.cs" />
+    <Compile Include="Specifications\SpecificationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

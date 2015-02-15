@@ -55,6 +55,8 @@
     <Compile Include="Domain\IFactory.cs" />
     <Compile Include="Domain\IRepository.cs" />
     <Compile Include="Domain\IService.cs" />
+    <Compile Include="Specifications\AndSpecification.cs" />
+    <Compile Include="Specifications\ISpecification.cs" />
     <Compile Include="Domain\ObjectIsInvalidException.cs" />
     <Compile Include="Domain\ValueObject.cs" />
     <Compile Include="EventBus\EventBusExtension.cs" />
@@ -67,6 +69,8 @@
     <Compile Include="EventBus\IPublish.cs" />
     <Compile Include="EventBus\ISubscribe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Specifications\OrSpecification.cs" />
+    <Compile Include="Specifications\Specification.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
