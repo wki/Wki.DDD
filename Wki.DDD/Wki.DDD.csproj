@@ -55,6 +55,7 @@
     <Compile Include="Domain\IFactory.cs" />
     <Compile Include="Domain\IRepository.cs" />
     <Compile Include="Domain\IService.cs" />
+    <Compile Include="Specifications\AbstractSpecification.cs" />
     <Compile Include="Specifications\AndSpecification.cs" />
     <Compile Include="Specifications\ISpecification.cs" />
     <Compile Include="Domain\ObjectIsInvalidException.cs" />

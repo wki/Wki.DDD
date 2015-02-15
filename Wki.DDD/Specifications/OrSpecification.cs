@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Wki.DDD.Specifications
 {
-    public class OrSpecification<TEntity> : Specification<TEntity>
+    public class OrSpecification<TEntity> : AbstractSpecification<TEntity>
         where TEntity : class
     {
-        private Specification<TEntity> lhs;
-        private Specification<TEntity> rhs;
+        private ISpecification<TEntity> lhs;
+        private ISpecification<TEntity> rhs;
 
-        public OrSpecification(Specification<TEntity> lhs, Specification<TEntity> rhs)
+        public OrSpecification(ISpecification<TEntity> lhs, ISpecification<TEntity> rhs)
         {
             this.lhs = lhs;
             this.rhs = rhs;

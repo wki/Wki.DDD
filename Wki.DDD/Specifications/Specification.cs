@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Wki.DDD.Specifications
 {
-    public class Specification<TEntity> : ISpecification<TEntity>
+    public class Specification<TEntity> : AbstractSpecification<TEntity>
         where TEntity: class
     {
         private Expression<Predicate<TEntity>> predicate;
@@ -16,11 +16,6 @@ namespace Wki.DDD.Specifications
         public Expression<Predicate<TEntity>> Predicate
         {
             get { return predicate; }
-        }
-
-        // TODO: factor out into AbstractSpecification
-        protected Specification()
-        {
         }
 
         public Specification(Expression<Predicate<TEntity>> predicate)
@@ -33,42 +28,9 @@ namespace Wki.DDD.Specifications
         {
         }
 
-        public virtual bool IsSatisfiedBy(TEntity entity) 
+        public override bool IsSatisfiedBy(TEntity entity) 
         {
             return predicate.Compile().Invoke(entity);
         }
-
-        #region operators
-        // usage: specification.And(lambda)
-        public ISpecification<TEntity> And(Expression<Predicate<TEntity>> otherPredicate)
-        {
-            return new AndSpecification<TEntity>(
-                this,
-                new Specification<TEntity>(otherPredicate)
-            );
-        }
-
-        // usage: specification.And(new spec)
-        // returns: new specification
-        public ISpecification<TEntity> And(ISpecification<TEntity> other)
-        {
-            return And(other.Predicate);
-        }
-
-        public ISpecification<TEntity> Or(Expression<Predicate<TEntity>> otherPredicate)
-        {
-            return
-                new OrSpecification<TEntity>(
-                    this,
-                    new Specification<TEntity>(otherPredicate)
-                );
-        }
-
-        public ISpecification<TEntity> Or(ISpecification<TEntity> other)
-        {
-            return Or(other.Predicate);
-        }
-
-        #endregion
     }
 }

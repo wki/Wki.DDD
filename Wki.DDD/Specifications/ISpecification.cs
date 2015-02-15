@@ -15,8 +15,6 @@ namespace Wki.DDD.Specifications
     public interface ISpecification<TEntity>
         where TEntity: class
     {
-        Expression<Predicate<TEntity>> Predicate { get; }
-
         bool IsSatisfiedBy(TEntity entity);
     }
 }
