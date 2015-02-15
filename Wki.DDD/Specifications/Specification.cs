@@ -25,6 +25,18 @@ namespace Wki.DDD.Specifications
             Predicate = predicate;
         }
 
+        #region booleans
+        public static bool operator true(Specification<TEntity> spec)
+        {
+            return true;
+        }
+
+        public static bool operator false(Specification<TEntity> spec)
+        {
+            return false;
+        }
+        #endregion
+
         #region AND
         public static Specification<TEntity> operator &(Specification<TEntity> lhs, Specification<TEntity> rhs)
         {

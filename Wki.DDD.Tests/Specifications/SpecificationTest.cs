@@ -124,6 +124,21 @@ namespace Wki.DDD.Tests.Specifications
             // Assert
             Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public void Specification_TrueAndAlsoOpTrue_ReturnsTrue()
+        {
+            // Arrange
+            var s1 = new Specification<TestEntity>(e => e.Name == "Unnamed");
+            var s2 = new Specification<TestEntity>(e => e.Number == 42);
+            var s = s1 && s2;
+
+            // Act
+            var result = s.IsSatisfiedBy(entity);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
         #endregion
 
         #region OR
@@ -162,6 +177,21 @@ namespace Wki.DDD.Tests.Specifications
             var s1 = new Specification<TestEntity>(e => e.Name == "Unnamed");
             var s2 = new Specification<TestEntity>(e => e.Number == 999);
             var s = s1 | s2;
+
+            // Act
+            var result = s.IsSatisfiedBy(entity);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void Specification_TrueOrElseOpFalse_ReturnsTrue()
+        {
+            // Arrange
+            var s1 = new Specification<TestEntity>(e => e.Name == "Unnamed");
+            var s2 = new Specification<TestEntity>(e => e.Number == 999);
+            var s = s1 || s2;
 
             // Act
             var result = s.IsSatisfiedBy(entity);
