@@ -26,6 +26,7 @@ namespace Wki.DDD.Specifications
         }
 
         #region booleans
+        // required for && and || operators to work.
         public static bool operator true(Specification<TEntity> spec)
         {
             return true;
