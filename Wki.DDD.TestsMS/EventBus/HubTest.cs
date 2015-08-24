@@ -1,25 +1,25 @@
 ﻿using FakeItEasy;
 using System;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Wki.DDD.EventBus;
 using Wki.DDD.Tests.Events;
 
 namespace Wki.DDD.Tests.EventBus
 {
-    [TestFixture]
+    [TestClass]
     public class HubTest
     {
         private IDispatcher dispatcher;
         private IHub hub;
 
-        [SetUp]
+        [TestInitialize]
         public void SetupHub()
         {
             dispatcher = A.Fake<IDispatcher>();
             hub = new Hub(dispatcher);
         }
 
-        [Test]
+        [TestMethod]
         public void Hub_Initially_DoesNotCallDispatcher()
         {
             // Assert
@@ -27,7 +27,7 @@ namespace Wki.DDD.Tests.EventBus
              .MustNotHaveHappened();
         }
 
-        [Test]
+        [TestMethod]
         public void Hub_Publish_CallsDispatcher()
         {
             // Act

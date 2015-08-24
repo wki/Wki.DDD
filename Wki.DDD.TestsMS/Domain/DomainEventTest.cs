@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Wki.DDD.EventBus;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Wki.DDD.Domain;
 
 namespace Wki.DDD.Tests.Domain
@@ -13,10 +15,10 @@ namespace Wki.DDD.Tests.Domain
     public class LoggingXEvent : LoggingEvent, IIsIEvent {}
     public class NonLoggingEvent : DomainEvent {}
 
-    [TestFixture]
+    [TestClass]
     public class DomainEventTest
     {
-        [Test]
+        [TestMethod]
         public void DomainEvent_GetAllBaseTypes_ReturnsIEvent()
         {
             // Arrange
@@ -26,7 +28,7 @@ namespace Wki.DDD.Tests.Domain
             Assert.AreEqual("IEvent", GetAllTypes(e));
         }
 
-        [Test]
+        [TestMethod]
         public void LoggingEvent_GetAllBaseTypes_ReturnsDomainEventIEvent()
         {
             // Arrange
@@ -36,7 +38,7 @@ namespace Wki.DDD.Tests.Domain
             Assert.AreEqual("DomainEvent, IEvent", GetAllTypes(e));
         }
 
-        [Test]
+        [TestMethod]
         public void NonLoggingEvent_GetAllBaseTypes_ReturnsDomainEventIEvent()
         {
             // Arrange
@@ -46,7 +48,7 @@ namespace Wki.DDD.Tests.Domain
             Assert.AreEqual("DomainEvent, IEvent", GetAllTypes(e));
         }
 
-        [Test]
+        [TestMethod]
         public void LoggingXEvent_GetAllBaseTypes_ReturnsMany()
         {
             // Arrange
@@ -64,5 +66,6 @@ namespace Wki.DDD.Tests.Domain
                  .OrderBy(s => s)
             );
         }
+
     }
 }

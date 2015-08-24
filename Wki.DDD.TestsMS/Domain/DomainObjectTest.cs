@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Wki.DDD.Domain;
 
 namespace Wki.DDD.Tests.Domain
@@ -11,10 +11,10 @@ namespace Wki.DDD.Tests.Domain
         }
     }
 
-    [TestFixture]
+    [TestClass]
     public class DomainObjectTest
     {
-        [Test]
+        [TestMethod]
         public void DomainObject_Initially_HasNoBrokenRules()
         {
             // Arrange
@@ -24,7 +24,7 @@ namespace Wki.DDD.Tests.Domain
             Assert.AreEqual(0, domainObject.GetBrokenRules().Count);
         }
 
-        [Test]
+        [TestMethod]
         public void DomainObject_WithoutBrokenRule_DoesNotThrowException()
         {
             // Arrange
@@ -37,7 +37,7 @@ namespace Wki.DDD.Tests.Domain
             Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void BrokenDomainObject_Initially_HasABrokenRule()
         {
             // Arrange
@@ -47,7 +47,7 @@ namespace Wki.DDD.Tests.Domain
             Assert.AreEqual(1, brokenDomainObject.GetBrokenRules().Count);
         }
 
-        [Test]
+        [TestMethod]
         [ExpectedException(typeof(ObjectIsInvalidException))]
         public void BrokenDomainObject_BrokenRule_ThrowsException()
         {

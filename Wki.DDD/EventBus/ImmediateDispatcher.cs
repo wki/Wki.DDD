@@ -8,7 +8,7 @@ namespace Wki.DDD.EventBus
 {
     public class ImmediateDispatcher : IDispatcher
     {
-        private static ILog log = LogManager.GetCurrentClassLogger();
+        private static ILog log = LogManager.GetLogger<ImmediateDispatcher>();
         // TODO: concurrent dictionary ???
         private static Dictionary<Type, List<MethodInfo>> methodCache = new Dictionary<Type, List<MethodInfo>>();
         private readonly IContainer container;

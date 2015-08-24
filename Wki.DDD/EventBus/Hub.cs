@@ -12,7 +12,7 @@ namespace Wki.DDD.EventBus
      */
     public class Hub : IHub
     {
-        private static ILog log = LogManager.GetCurrentClassLogger();
+        private static ILog log = LogManager.GetLogger<Hub>();
         private readonly IDispatcher dispatcher;
 
         public static IHub Current { get; private set; }

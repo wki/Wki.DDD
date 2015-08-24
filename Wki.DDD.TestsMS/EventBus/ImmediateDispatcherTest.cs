@@ -1,12 +1,12 @@
 ﻿using FakeItEasy;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Wki.DDD.EventBus;
 using Wki.DDD.Tests.Events;
 using Wki.DDD.Tests.Services;
 
 namespace Wki.DDD.Tests.EventBus
 {
-    [TestFixture]
+    [TestClass]
     public class ImmediateDispatcherTest
     {
         CatchAllService catchAllService;
@@ -17,7 +17,7 @@ namespace Wki.DDD.Tests.EventBus
         IContainer container;
         ImmediateDispatcher dispatcher;
 
-        [SetUp]
+        [TestInitialize]
         public void SetupDispatcher()
         {
             catchAllService = new CatchAllService();
@@ -39,7 +39,7 @@ namespace Wki.DDD.Tests.EventBus
             dispatcher = new ImmediateDispatcher(container);
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_NoEventsSent_NothingIsCaptured()
         {
             // Assert
@@ -49,7 +49,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.AreEqual(0, somethingErrorService.nrEventsHandled, "somethingError");
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_NotCapturedSent_OnlyCatchAllCaptures()
         {
             // Act
@@ -62,7 +62,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.AreEqual(0, somethingErrorService.nrEventsHandled, "somethingError");
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_ErrorSent_ErrorAndCatchAllCaptures()
         {
             // Act
@@ -75,7 +75,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.AreEqual(100, somethingErrorService.nrEventsHandled, "somethingError");
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_ErrorSentTwice_ErrorAndCatchAllCaptures()
         {
             // Act
@@ -89,7 +89,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.AreEqual(200, somethingErrorService.nrEventsHandled, "somethingError");
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_MiscMessagesSent_ErrorAndCatchAllCaptures()
         {
             // Act
@@ -104,7 +104,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.AreEqual(102, somethingErrorService.nrEventsHandled, "somethingError");
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchEventBenchmark()
         {
             // Arrange
@@ -123,7 +123,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchBaseTypesBenchmark()
         {
             // Arrange
@@ -142,7 +142,7 @@ namespace Wki.DDD.Tests.EventBus
             Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void ImmediateDispatcher_1000xMiscMessagesSent_DispatchBenchmark()
         {
             // Arrange
