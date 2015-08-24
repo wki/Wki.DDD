@@ -9,3 +9,4 @@ install:
 script:
   - xbuild /p:Configuration=Release Wki.DDD.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Wki.DDD.Tests/bin/Release/Wki.DDD.Tests.dll
+
